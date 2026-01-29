@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Activities Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 100px 100px;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        .activities-list {
+            margin-bottom: 25px;
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .activity-details {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .activity-time {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 0 15px;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            padding: 8px 12px;
+            font-size: 12px;
+            border-radius: 5px;
+        }
+
+        .delete-btn:hover {
+            background: #ff5252;
+        }
+
+        .summary-section {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 2px solid #667eea;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            border-top: 2px solid #667eea;
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+        .category-label {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        .clear-btn {
+            width: 100%;
+            background: #ff9800;
+            margin-top: 20px;
+        }
+
+        .clear-btn:hover {
+            background: #f57c00;
+        }
+
+        @media (max-width: 500px) {
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-item {
+                flex-wrap: wrap;
+            }
+
+            .activity-time {
+                margin: 10px 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 Daily Activities Calculator</h1>
+
+        <div class="input-section">
+            <input type="text" id="activityInput" placeholder="Activity name (e.g., Work, Exercise, Sleep)">
+            <input type="number" id="timeInput" placeholder="Hours" min="0" max="24" step="0.5">
+            <select id="categoryInput">
+                <option value="Work">Work</option>
+                <option value="Exercise">Exercise</option>
+                <option value="Sleep">Sleep</option>
+                <option value="Leisure">Leisure</option>
+                <option value="Meals">Meals</option>
+                <option value="Study">Study</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <button onclick="addActivity()" style="width: 100%; margin-bottom: 25px;">Add Activity</button>
+
+        <div class="activities-list" id="activitiesList">
+            <div class="empty-state">No activities added yet. Start tracking your day!</div>
+        </div>
+
+        <div class="summary-section">
+            <div class="summary-row">
+                <span>Total Activities:</span>
+                <span id="totalActivities">0</span>
+            </div>
+            <div class="summary-row">
+                <span>Total Hours:</span>
+                <span id="totalHours">0.0</span>
+            </div>
+            <div class="summary-row">
+                <span>Remaining Hours:</span>
+                <span id="remainingHours">24.0</span>
+            </div>
+        </div>
+
+        <button class="clear-btn" onclick="clearAll()">Clear All</button>
+    </div>
+
+    <script>
+        let activities = [];
+
+        function addActivity() {
+            const name = document.getElementById('activityInput').value.trim();
+            const time = parseFloat(document.getElementById('timeInput').value);
+            const category = document.getElementById('categoryInput').value;
+
+            if (!name) {
+                alert('Please enter an activity name');
+                return;
+            }
+
+            if (isNaN(time) || time <= 0) {
+                alert('Please enter a valid time');
+                return;
+            }
+
+            if (time > 24) {
+                alert('Activity time cannot exceed 24 hours');
+                return;
+            }
+
+            activities.push({
+                id: Date.now(),
+                name,
+                time,
+                category
+            });
+
+            document.getElementById('activityInput').value = '';
+            document.getElementById('timeInput').value = '';
+            document.getElementById('timeInput').focus();
+
+            updateDisplay();
+        }
+
+        function deleteActivity(id) {
+            activities = activities.filter(activity => activity.id !== id);
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const list = document.getElementById('activitiesList');
+
+            if (activities.length === 0) {
+                list.innerHTML = '<div class="empty-state">No activities added yet. Start tracking your day!</div>';
+            } else {
+                list.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-name">${activity.name}</div>
+                            <div class="activity-details">
+                                <span class="category-label">${activity.category}</span>
+                                <span>${new Date(activity.id).toLocaleTimeString()}</span>
+                            </div>
+                        </div>
+                        <div class="activity-time">${activity.time}h</div>
+                        <button class="delete-btn" onclick="deleteActivity(${activity.id})">Delete</button>
+                    </div>
+                `).join('');
+            }
+
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const totalActivities = activities.length;
+            const totalHours = activities.reduce((sum, activity) => sum + activity.time, 0).toFixed(1);
+            const remainingHours = (24 - totalHours).toFixed(1);
+
+            document.getElementById('totalActivities').textContent = totalActivities;
+            document.getElementById('totalHours').textContent = totalHours;
+            document.getElementById('remainingHours').textContent = remainingHours;
+        }
+
+        function clearAll() {
+            if (activities.length === 0) {
+                alert('No activities to clear');
+                return;
+            }
+
+            if (confirm('Are you sure you want to clear all activities?')) {
+                activities = [];
+                updateDisplay();
+            }
+        }
+
+        // Allow Enter key to add activity
+        document.getElementById('activityInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addActivity();
+            }
+        });
+
+        document.getElementById('timeInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addActivity();
+            }
+        });
+    </script>
+</body>
+</html>
