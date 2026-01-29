@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Replicode</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    /* Navbar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background: #ffffff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    header h2 {
+      margin: 0;
+      flex: 1;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    /* Hero section */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .hero h1 {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #666;
+    }
+
+    /* Buttons */
+    .buttons {
+      margin-top: 30px;
+    }
+
+    .buttons a {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      border: 2px solid #333;
+      text-decoration: none;
+      color: #333;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    .buttons a.primary {
+      background: #333;
+      color: #fff;
+    }
+
+    /* Features */
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 50px 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      width: 260px;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .card .icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 15px;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      background: #555;
+    }
+
+    /* Dark Theme */
+    body.dark-theme {
+      background: #1a1a1a;
+      color: #f0f0f0;
+    }
+
+    body.dark-theme header {
+      background: #222;
+      border-bottom-color: #444;
+    }
+
+    body.dark-theme nav a {
+      color: #f0f0f0;
+    }
+
+    body.dark-theme .hero p {
+      color: #bbb;
+    }
+
+    body.dark-theme .card {
+      background: #2a2a2a;
+      border-color: #444;
+    }
+
+    body.dark-theme .card p {
+      color: #bbb;
+    }
+
+    body.dark-theme .buttons a {
+      border-color: #f0f0f0;
+      color: #f0f0f0;
+    }
+
+    body.dark-theme .buttons a.primary {
+      background: #f0f0f0;
+      color: #1a1a1a;
+    }
+
+    body.dark-theme .theme-toggle {
+      background: #f0f0f0;
+      color: #1a1a1a;
+    }
+
+    body.dark-theme .theme-toggle:hover {
+      background: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <h2>Replicode</h2>
+    <div class="nav-container">
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Features</a>
+        <a href="#">Contact</a>
+      </nav>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Build. Learn. Replicate</h1>
+    <p>Practice coding by building real projects.</p>
+
+    <div class="buttons">
+      <a href="https://github.com/karthikeya18code/Replicode12" target="_blank" class="primary">View on GitHub</a>
+      <a href="#">Learn More</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="card">
+      <div class="icon">💡</div>
+      <h3>Learn by Doing</h3>
+      <p>Improve your coding skills by building projects.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon"></div>
+      <h3>Project Examples</h3>
+      <p>Study real-world projects step by step.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">⚙️</div>
+      <h3>Easy to Follow</h3>
+      <p>Simple steps to replicate and learn faster.</p>
+    </div>
+  </section>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const button = document.querySelector('.theme-toggle');
+      
+      body.classList.toggle('dark-theme');
+      
+      if (body.classList.contains('dark-theme')) {
+        button.textContent = '☀️ Light';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        button.textContent = '🌙 Dark';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    // Load saved theme preference
+    window.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        document.querySelector('.theme-toggle').textContent = '☀️ Light';
+      }
+    });
+  </script>
+
+</body>
+</html>
